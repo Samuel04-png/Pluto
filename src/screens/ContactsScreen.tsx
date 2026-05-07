@@ -2,11 +2,11 @@
 
 import { ArrowLeft, Plus, Search, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { ContactAvatar } from "@/components/contacts/ContactAvatar";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { PlutoLogo } from "@/components/ui/Logo";
 import { TextInput } from "@/components/ui/TextInput";
-import { cn } from "@/lib/utils/cn";
 import { shortenAddress } from "@/lib/utils/format";
 import type { Contact } from "@/types";
 
@@ -54,9 +54,7 @@ export function ContactsScreen({
               className="block w-full text-left"
             >
               <Card className="flex items-center gap-3 p-4 shadow-sm transition hover:border-pluto-blue/35">
-                <div className={cn("grid h-12 w-12 place-items-center rounded-full text-sm font-bold", contact.color)}>
-                  {contact.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}
-                </div>
+                <ContactAvatar contact={contact} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <p className="truncate text-sm font-semibold text-pluto-navy">{contact.name}</p>

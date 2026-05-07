@@ -2,10 +2,10 @@
 
 import { ArrowLeft, Copy, Pencil, Send, ShieldCheck, Trash2, WalletCards } from "lucide-react";
 import { useState } from "react";
+import { ContactAvatar } from "@/components/contacts/ContactAvatar";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { PlutoLogo } from "@/components/ui/Logo";
-import { cn } from "@/lib/utils/cn";
 import { shortenAddress } from "@/lib/utils/format";
 import type { Contact } from "@/types";
 
@@ -40,9 +40,7 @@ export function ContactDetailScreen({
         </header>
 
         <section className="pt-4 text-center">
-          <div className={cn("mx-auto grid h-24 w-24 place-items-center rounded-full text-2xl font-bold shadow-sm", contact.color)}>
-            {contact.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}
-          </div>
+          <ContactAvatar contact={contact} size="lg" className="mx-auto" />
           <div className="mt-4 flex items-center justify-center gap-2">
             <h2 className="text-3xl font-semibold tracking-normal text-pluto-navy">{contact.name}</h2>
             {contact.trusted ? <ShieldCheck className="h-5 w-5 text-pluto-blue" /> : null}

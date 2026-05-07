@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioWaveform, ChevronRight, Menu, Mic, MoreHorizontal, Plus, X } from "lucide-react";
+import { ArrowUp, AudioWaveform, ChevronRight, Menu, Mic, MoreHorizontal, Plus, X } from "lucide-react";
 import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ChatBubble } from "@/components/voice/ChatBubble";
 import { PlutoOrb } from "@/components/voice/PlutoOrb";
@@ -76,13 +76,25 @@ export function VoiceLayer({
     });
   }, [messages.length, mode]);
 
-  const currentOrbState: OrbState = recorder.isRecording
-    ? "listening"
-    : recorder.isTranscribing
-      ? "thinking"
-      : mode === "voice" && orbState === "idle"
-        ? "idle"
-        : orbState;
+  useEffect(() => {
+    if (mode !== "voice" || orbState !== "idle") return undefined;
+    if (recorder.state !== "idle") return undefined;
+
+    const timer = window.setTimeout(() => {
+      void recorder.start();
+    }, 240);
+    return () => window.clearTimeout(timer);
+  }, [mode, orbState, recorder.state]);
+
+  const currentOrbState: OrbState = orbState !== "idle"
+    ? orbState
+    : recorder.isRecording
+      ? "listening"
+      : recorder.isTranscribing
+        ? "thinking"
+        : mode === "voice"
+          ? "idle"
+          : orbState;
 
   const lastMessages = messages.slice(-3);
   const lastMessage = messages[messages.length - 1];
@@ -166,6 +178,7 @@ export function VoiceLayer({
 
   const translateY = (isHomeRevealed ? revealY : 0) + dragOffset;
   const hasConversation = messages.length > 0;
+  const hasInput = input.trim().length > 0;
   const voiceStatus = recorder.isRecording ? "Listening" : recorder.isTranscribing ? "Thinking" : "Pluto Voice";
 
   return (
@@ -354,17 +367,25 @@ export function VoiceLayer({
             </div>
 
             <button
-              type="button"
-              aria-label={mode === "voice" ? "End voice mode" : "Start voice mode"}
-              onClick={mode === "voice" ? endVoiceMode : startVoiceMode}
+              type={mode === "chat" && hasInput ? "submit" : "button"}
+              aria-label={mode === "voice" ? "End voice mode" : hasInput ? "Send message" : "Start voice mode"}
+              onClick={mode === "voice" ? endVoiceMode : hasInput ? undefined : startVoiceMode}
               className={cn(
                 "grid h-14 w-14 shrink-0 place-items-center rounded-full shadow-sm transition active:scale-[0.97]",
                 mode === "voice"
                   ? "border border-pluto-line bg-white text-pluto-navy"
-                  : "bg-pluto-blue text-white shadow-[0_16px_32px_rgba(10,132,255,0.22)]"
+                  : hasInput
+                    ? "bg-pluto-navy text-white shadow-[0_16px_32px_rgba(7,26,51,0.18)]"
+                    : "bg-pluto-blue text-white shadow-[0_16px_32px_rgba(10,132,255,0.22)]"
               )}
             >
-              {mode === "voice" ? <X className="h-7 w-7" /> : <AudioWaveform className="h-7 w-7" />}
+              {mode === "voice" ? (
+                <X className="h-7 w-7" />
+              ) : hasInput ? (
+                <ArrowUp className="h-7 w-7" />
+              ) : (
+                <AudioWaveform className="h-7 w-7" />
+              )}
             </button>
           </div>
         </form>

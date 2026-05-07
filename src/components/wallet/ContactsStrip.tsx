@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
+import { ContactAvatar } from "@/components/contacts/ContactAvatar";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { cn } from "@/lib/utils/cn";
 import { shortenAddress } from "@/lib/utils/format";
 import type { Contact } from "@/types";
 
@@ -33,13 +33,7 @@ export function ContactsStrip({
             onClick={() => onSelectContact(contact)}
             className="w-[5.4rem] shrink-0 rounded-[1.35rem] border border-pluto-line bg-white p-3 text-center shadow-sm"
           >
-            <div className={cn("mx-auto grid h-12 w-12 place-items-center rounded-full text-sm font-bold", contact.color)}>
-              {contact.name
-                .split(" ")
-                .map((part) => part[0])
-                .join("")
-                .slice(0, 2)}
-            </div>
+            <ContactAvatar contact={contact} className="mx-auto" />
             <p className="mt-2 truncate text-xs font-semibold text-pluto-navy">{contact.name}</p>
             <p className="truncate text-[10px] text-pluto-slate">{shortenAddress(contact.walletAddress, 3, 3)}</p>
           </button>

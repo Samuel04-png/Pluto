@@ -11,6 +11,7 @@ export const demoContacts: Contact[] = [
     recent: true,
     lastTransactionSummary: "Received 1.20 SOL",
     color: "bg-blue-100 text-blue-700",
+    avatarUrl: "/avatars/muape-k.svg",
     notes: "Lunch, hackathon demos, and quick reimbursements."
   },
   {
@@ -23,6 +24,7 @@ export const demoContacts: Contact[] = [
     recent: false,
     lastTransactionSummary: "Requested 0.30 SOL",
     color: "bg-cyan-100 text-cyan-700",
+    avatarUrl: "/avatars/muape-a.svg",
     notes: "Second Muape contact used for ambiguity testing."
   },
   {
@@ -35,6 +37,7 @@ export const demoContacts: Contact[] = [
     recent: true,
     lastTransactionSummary: "Paid lunch request",
     color: "bg-sky-100 text-sky-700",
+    avatarUrl: "/avatars/alex.svg",
     notes: "Usually pays payment requests."
   },
   {
@@ -47,6 +50,7 @@ export const demoContacts: Contact[] = [
     recent: true,
     lastTransactionSummary: "Sent 0.50 SOL",
     color: "bg-indigo-100 text-indigo-700",
+    avatarUrl: "/avatars/zena.svg",
     notes: "Trusted demo recipient."
   },
   {
@@ -59,6 +63,7 @@ export const demoContacts: Contact[] = [
     recent: true,
     lastTransactionSummary: "Received 2.00 SOL",
     color: "bg-violet-100 text-violet-700",
+    avatarUrl: "/avatars/solaris.svg",
     notes: "Needs review before larger sends."
   }
 ];

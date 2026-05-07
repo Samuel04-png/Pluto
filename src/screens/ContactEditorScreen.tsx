@@ -63,6 +63,7 @@ export function ContactEditorScreen({
       recent: draft?.recent ?? false,
       lastTransactionSummary: draft?.lastTransactionSummary || "New contact",
       color: draft?.color || "bg-blue-100 text-blue-700",
+      avatarUrl: draft?.avatarUrl,
       notes
     });
   }

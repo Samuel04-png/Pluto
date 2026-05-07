@@ -1,4 +1,5 @@
 import { PlutoLogo } from "@/components/ui/Logo";
+import { ContactAvatar } from "@/components/contacts/ContactAvatar";
 import { cn } from "@/lib/utils/cn";
 import type { ChatMessage, Contact } from "@/types";
 
@@ -36,8 +37,11 @@ export function ChatBubble({
                 onClick={() => onChooseContact?.(contact)}
                 className="flex items-center justify-between rounded-2xl border border-pluto-line bg-pluto-mist px-3 py-2 text-left transition hover:border-pluto-blue/50"
               >
-                <span className="font-semibold">{contact.name}</span>
-                <span className="text-xs text-pluto-slate">ending {contact.walletEnding}</span>
+                <span className="flex min-w-0 items-center gap-2">
+                  <ContactAvatar contact={contact} size="sm" />
+                  <span className="truncate font-semibold">{contact.name}</span>
+                </span>
+                <span className="shrink-0 text-xs text-pluto-slate">ending {contact.walletEnding}</span>
               </button>
             ))}
           </div>

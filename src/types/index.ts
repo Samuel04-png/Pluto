@@ -58,6 +58,7 @@ export interface Contact {
   recent?: boolean;
   lastTransactionSummary?: string;
   color: string;
+  avatarUrl?: string;
   notes?: string;
 }
 

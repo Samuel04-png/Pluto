@@ -196,3 +196,6 @@ After deployment, set `NEXT_PUBLIC_PLUTO_PROGRAM_ID=8MEhzdrriUEbKK1s4MmNzK876Ymy
 - AI-assisted parser behind the rule-based parser
 - Push notifications for received payments
 - Realtime Solana request status tracking
+
+
+- I am open for work (samuel.impeldown.dev)

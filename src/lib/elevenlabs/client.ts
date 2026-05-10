@@ -38,7 +38,7 @@ export async function transcribeWithElevenLabs(file: File) {
 
 export async function speakWithElevenLabs(text: string, voiceId?: string) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  const resolvedVoiceId = voiceId || process.env.ELEVENLABS_VOICE_ID || "JBFqnCBsd6RMkjVDRZzb";
+  const resolvedVoiceId = voiceId || process.env.ELEVENLABS_VOICE_ID || "RPEIZnKMqlQiZyZd1Dae";
 
   if (!apiKey) {
     return {

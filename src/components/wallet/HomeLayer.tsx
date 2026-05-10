@@ -16,6 +16,7 @@ export function HomeLayer({
   onSend,
   onRequest,
   onAddFunds,
+  onWithdraw,
   onAddContact,
   onContacts,
   onContact,
@@ -30,6 +31,7 @@ export function HomeLayer({
   onSend: () => void;
   onRequest: () => void;
   onAddFunds: () => void;
+  onWithdraw: () => void;
   onAddContact: () => void;
   onContacts: () => void;
   onContact: (contact: Contact) => void;
@@ -64,6 +66,7 @@ export function HomeLayer({
           onSend={onSend}
           onRequest={onRequest}
           onAddFunds={onAddFunds}
+          onWithdraw={onWithdraw}
         />
         <ContactsStrip
           contacts={contacts}

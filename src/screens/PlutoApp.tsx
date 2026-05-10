@@ -38,6 +38,7 @@ import { ReceiveScreen } from "@/screens/ReceiveScreen";
 import { RequestPaymentScreen } from "@/screens/RequestPaymentScreen";
 import { SettingsScreen } from "@/screens/SettingsScreen";
 import { SplashScreen } from "@/screens/SplashScreen";
+import { WithdrawScreen } from "@/screens/WithdrawScreen";
 import type {
   Activity,
   ChatMessage,
@@ -255,6 +256,19 @@ export function PlutoApp() {
 
       addMessage({ role: "user", text: trimmed });
       setOrbState("thinking");
+
+      if (/\b(withdraw|cash out|cashout|mobile money|bank transfer|buy sol|add sol)\b/i.test(trimmed)) {
+        const isWithdraw = /\b(withdraw|cash out|cashout)\b/i.test(trimmed);
+        addMessage({
+          role: "pluto",
+          text: isWithdraw
+            ? "Opening cash out. Choose bank or mobile money, then confirm the withdrawal details."
+            : "Opening Add SOL. You can buy with bank or mobile money, or deposit SOL directly."
+        });
+        setOrbState("idle");
+        setScreen(isWithdraw ? "withdraw" : "add-funds");
+        return;
+      }
 
       const contactDraftFromCommand = parseContactDraftCommand(trimmed);
       if (contactDraftFromCommand) {
@@ -641,6 +655,9 @@ export function PlutoApp() {
       />
     );
   }
+  if (screen === "withdraw") {
+    return <WithdrawScreen wallet={wallet} onBack={() => setScreen("app")} />;
+  }
   if (screen === "settings") {
     return (
       <SettingsScreen
@@ -670,6 +687,7 @@ export function PlutoApp() {
           processMessage("Request SOL");
         }}
         onAddFunds={() => setScreen("add-funds")}
+        onWithdraw={() => setScreen("withdraw")}
         onAddContact={() => openAddContact()}
         onContacts={() => setScreen("contacts")}
         onContact={openContact}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff, Plus, QrCode, Send, WalletCards } from "lucide-react";
+import { Banknote, Eye, EyeOff, Plus, QrCode, Send, WalletCards } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -12,13 +12,15 @@ export function BalanceCard({
   onReceive,
   onSend,
   onRequest,
-  onAddFunds
+  onAddFunds,
+  onWithdraw
 }: {
   wallet: WalletSummary;
   onReceive: () => void;
   onSend: () => void;
   onRequest: () => void;
   onAddFunds: () => void;
+  onWithdraw: () => void;
 }) {
   const [hidden, setHidden] = useState(false);
 
@@ -56,7 +58,7 @@ export function BalanceCard({
           </div>
         </div>
 
-        <div className="relative mt-6 grid grid-cols-3 gap-2">
+        <div className="relative mt-6 grid grid-cols-4 gap-2">
           <Button
             variant="secondary"
             className="h-14 flex-col gap-1 px-2 text-xs"
@@ -79,6 +81,14 @@ export function BalanceCard({
             onClick={onRequest}
           >
             Request
+          </Button>
+          <Button
+            variant="secondary"
+            className="h-14 flex-col gap-1 px-2 text-xs"
+            icon={<Banknote className="h-4 w-4" />}
+            onClick={onWithdraw}
+          >
+            Cash out
           </Button>
         </div>
       </div>

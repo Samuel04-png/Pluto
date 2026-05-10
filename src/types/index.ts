@@ -26,6 +26,7 @@ export type Screen =
   | "contact-editor"
   | "activity-detail"
   | "add-funds"
+  | "withdraw"
   | "settings";
 
 export type IntentName =

@@ -19,6 +19,7 @@ Voice command -> parsed intent -> contact check -> confirmation screen -> Solana
 - Contact detail, manual add/edit/remove, and voice/text contact creation
 - Recent activity receipt/detail screens with repeat actions
 - Add SOL funding screen with wallet QR, copy address, and Devnet faucet link
+- Buy SOL and cash out mock flows for bank transfer or mobile money provider handoff
 - Hold-to-confirm transaction safety screen
 - Success receipt with Devnet explorer link
 - Receive SOL QR screen
@@ -98,7 +99,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 
 ELEVENLABS_API_KEY=
-ELEVENLABS_VOICE_ID=
+ELEVENLABS_VOICE_ID=RPEIZnKMqlQiZyZd1Dae
 ELEVENLABS_STT_MODEL_ID=scribe_v2
 ELEVENLABS_TTS_MODEL_ID=eleven_multilingual_v2
 
@@ -132,6 +133,7 @@ Pluto uses secure server-side ElevenLabs API routes so the API key never ships t
 
 - Demo Mode works even without Firebase, ElevenLabs, or a funded Solana wallet.
 - `/api/solana/send` returns a simulated demo signature unless `DEMO_REAL_SEND=true` and `DEMO_WALLET_SECRET_KEY` are configured.
+- Bank transfer and mobile money buy/cash-out screens are provider-ready demo flows. They do not charge or pay out real fiat until a licensed fiat on/off-ramp partner is connected.
 - Wallet custody screens are UI placeholders. Do not use the current custody approach for mainnet.
 - Contact addresses in demo data are presentation-safe placeholders.
 
@@ -202,6 +204,7 @@ After deployment, set `NEXT_PUBLIC_PLUTO_PROGRAM_ID=8MEhzdrriUEbKK1s4MmNzK876Ymy
 ## Known Limitations
 
 - Demo send is simulated by default for reliability unless `DEMO_REAL_SEND=true` and a funded Devnet wallet are configured.
+- Fiat buy/cash-out requires KYC, compliance, and a licensed on/off-ramp provider before production use.
 - Real wallet key management needs secure mobile-grade custody before mainnet.
 - Voice recording depends on browser microphone support and HTTPS in production.
 - Mainnet is intentionally disabled for the hackathon build.

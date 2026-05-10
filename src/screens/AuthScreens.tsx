@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Fingerprint, KeyRound, Lock, Mail, Shield } from "lucide-react";
+import { ArrowLeft, Fingerprint, KeyRound, Lock, Mail, Shield, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -12,9 +12,10 @@ export function AuthScreen({
   onContinue,
   onDemo
 }: {
-  onContinue: (email: string, password: string) => Promise<void> | void;
+  onContinue: (email: string, password: string, displayName?: string) => Promise<void> | void;
   onDemo: () => void;
 }) {
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +25,7 @@ export function AuthScreen({
     setError("");
     setLoading(true);
     try {
-      await onContinue(email, password);
+      await onContinue(email, password, displayName);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unable to create or sign in to your account.";
       setError(message.replace(/^Firebase:\s*/i, ""));
@@ -36,6 +37,18 @@ export function AuthScreen({
   return (
     <AuthFrame title="Create account" subtitle="Use a simple account for the demo. Firebase Auth is wired through env configuration.">
       <div className="space-y-3">
+        <label className="block space-y-2">
+          <span className="text-sm font-semibold text-pluto-navy">Username</span>
+          <div className="relative">
+            <UserRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-pluto-slate" />
+            <TextInput
+              className="pl-11"
+              placeholder="samuel"
+              value={displayName}
+              onChange={(event) => setDisplayName(event.target.value)}
+            />
+          </div>
+        </label>
         <label className="block space-y-2">
           <span className="text-sm font-semibold text-pluto-navy">Email</span>
           <div className="relative">
@@ -63,7 +76,7 @@ export function AuthScreen({
           </div>
         </label>
         {error ? <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm leading-5 text-red-700">{error}</p> : null}
-        <Button size="lg" className="w-full" onClick={submit} disabled={loading || !email || password.length < 6}>
+        <Button size="lg" className="w-full" onClick={submit} disabled={loading || !displayName.trim() || !email || password.length < 6}>
           {loading ? "Connecting..." : "Continue"}
         </Button>
         <Button size="lg" variant="ghost" className="w-full" onClick={onDemo}>Use demo mode</Button>

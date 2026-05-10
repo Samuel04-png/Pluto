@@ -83,19 +83,22 @@ async function collectionHasDocuments(path: string, uid: string) {
   return !snapshot.empty;
 }
 
-export async function createOrSignInWithEmail(email: string, password: string) {
+export async function createOrSignInWithEmail(email: string, password: string, displayName?: string) {
   const { auth } = assertFirebase();
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedDisplayName = displayName?.trim();
 
   try {
     const credential = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
-    const displayName = normalizedEmail.split("@")[0];
-    await updateProfile(credential.user, { displayName }).catch(() => undefined);
+    await updateProfile(credential.user, { displayName: normalizedDisplayName || normalizedEmail.split("@")[0] }).catch(() => undefined);
     return credential.user;
   } catch (error) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : "";
     if (code === "auth/email-already-in-use") {
       const credential = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+      if (normalizedDisplayName && credential.user.displayName !== normalizedDisplayName) {
+        await updateProfile(credential.user, { displayName: normalizedDisplayName }).catch(() => undefined);
+      }
       return credential.user;
     }
     throw error;

@@ -113,6 +113,8 @@ export interface PaymentRequest {
 export interface PlutoSettings {
   voiceEnabled: boolean;
   voiceStyle: "calm" | "bright" | "quiet";
+  voiceLanguage: "en-US" | "en-GB" | "en-ZA" | "fr-FR" | "es-ES" | "pt-BR";
+  accentAdaptation: boolean;
   biometricEnabled: boolean;
   requireConfirmation: boolean;
   network: Network;

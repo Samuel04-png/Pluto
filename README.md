@@ -9,6 +9,7 @@ Voice command -> parsed intent -> contact check -> confirmation screen -> Solana
 ## Features
 
 - Mobile-first Next.js PWA with TypeScript
+- Custom username capture during account registration
 - Voice/chat screen as the default app surface
 - Swipe-down Home reveal behind the voice layer
 - White-and-blue premium fintech UI
@@ -22,9 +23,11 @@ Voice command -> parsed intent -> contact check -> confirmation screen -> Solana
 - Success receipt with Devnet explorer link
 - Receive SOL QR screen
 - Solana Pay request QR/payment link screen
+- Solana Mobile settings status and native Android Mobile Wallet Adapter scaffold
 - Firebase client setup and Firestore rules
 - Firebase Auth + Firestore-backed profile, wallet metadata, contacts, activity, requests, and settings
 - ElevenLabs STT/TTS API routes with text fallback
+- Voice language settings with browser recognition language hints and ElevenLabs fallback for accents
 - Solana Devnet send route with explicit hackathon demo shortcut
 
 ## Tech Stack
@@ -34,6 +37,7 @@ Voice command -> parsed intent -> contact check -> confirmation screen -> Solana
 - Animation: CSS transitions and native pointer gestures
 - Voice: ElevenLabs Speech-to-Text and Text-to-Speech
 - Blockchain: Solana Devnet via `@solana/web3.js`
+- Mobile: Solana Mobile Android scaffold with Mobile Wallet Adapter dependencies
 - Data/Auth: Firebase Auth + Firestore
 - QR/payment links: Solana Pay-style URLs with QR codes
 - Hosting: Vercel
@@ -105,6 +109,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_PLUTO_PROGRAM_ID=
 ```
 
+For local real Devnet sends, set `DEMO_REAL_SEND=true` and store a funded demo wallet secret key in `DEMO_WALLET_SECRET_KEY`. Never commit this value.
+
 ## ElevenLabs Integration
 
 Pluto uses secure server-side ElevenLabs API routes so the API key never ships to the browser:
@@ -161,6 +167,18 @@ Pluto includes a custom Anchor program for the Solana hackathon track.
 
 The app calls this program from `src/lib/solana/plutoProgram.ts` when `NEXT_PUBLIC_PLUTO_PROGRAM_ID` is set and `DEMO_REAL_SEND=true` is enabled with a funded `DEMO_WALLET_SECRET_KEY`. Otherwise, the hackathon demo falls back to simulated sends so judging remains reliable.
 
+## Solana Mobile
+
+Pluto includes a Solana Mobile implementation scaffold in `solana-mobile/`.
+
+- Mobile Wallet Adapter: native Android scaffold is included in `solana-mobile/android/app/src/main/java/app/pluto/mobile/PlutoMobileWalletAdapter.kt`.
+- Seed Vault: Pluto integrates through Mobile Wallet Adapter. Seed Vault remains inside the wallet app/device security layer; Pluto never reads Seed Vault keys directly.
+- Solana Mobile SDK: Android Gradle dependencies are defined in `solana-mobile/android/app/build.gradle.kts`.
+- Saga / Seeker: the same Android MWA flow targets Saga, Seeker, and standard Android devices.
+- dApp Store: submission checklist is included in `solana-mobile/dapp-store/submission-checklist.md`.
+
+The current production app is still a Next.js PWA. A signed APK/AAB must be built from the native scaffold before Pluto can be submitted to the Solana dApp Store.
+
 ### Deploy The Program
 
 On Linux/WSL, or after installing the Windows SDK desktop libraries with elevated Build Tools:
@@ -183,7 +201,7 @@ After deployment, set `NEXT_PUBLIC_PLUTO_PROGRAM_ID=8MEhzdrriUEbKK1s4MmNzK876Ymy
 
 ## Known Limitations
 
-- Demo send is simulated by default for reliability.
+- Demo send is simulated by default for reliability unless `DEMO_REAL_SEND=true` and a funded Devnet wallet are configured.
 - Real wallet key management needs secure mobile-grade custody before mainnet.
 - Voice recording depends on browser microphone support and HTTPS in production.
 - Mainnet is intentionally disabled for the hackathon build.

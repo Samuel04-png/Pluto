@@ -206,12 +206,12 @@ export function PlutoApp() {
   }, [applyFirebaseState]);
 
   const handleAuthContinue = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, displayName?: string) => {
       if (!firebaseDataAvailable) {
         throw new Error("Firebase is not configured in this environment.");
       }
 
-      const user = await createOrSignInWithEmail(email, password);
+      const user = await createOrSignInWithEmail(email, password, displayName);
       const state = await initializePlutoUser(user, { demoMode: false });
       applyFirebaseState(state);
       setScreen("create-wallet");
@@ -681,6 +681,8 @@ export function PlutoApp() {
         messages={messages}
         isHomeRevealed={homeRevealed}
         orbState={orbState}
+        voiceLanguage={settings.voiceLanguage}
+        accentAdaptation={settings.accentAdaptation}
         onRevealChange={setHomeRevealed}
         onSendMessage={processMessage}
         onSystemMessage={(text, variant) => addMessage({ role: "pluto", text, variant })}

@@ -5,8 +5,18 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { PlutoLogo } from "@/components/ui/Logo";
+import { solanaMobileCapabilities } from "@/lib/solana/mobile";
 import { shortenAddress } from "@/lib/utils/format";
 import type { PlutoSettings, WalletSummary } from "@/types";
+
+const voiceLanguageOptions = [
+  { value: "en-US", label: "English US" },
+  { value: "en-GB", label: "English UK" },
+  { value: "en-ZA", label: "English South Africa" },
+  { value: "fr-FR", label: "French" },
+  { value: "es-ES", label: "Spanish" },
+  { value: "pt-BR", label: "Portuguese BR" }
+] as const;
 
 export function SettingsScreen({
   wallet,
@@ -74,6 +84,19 @@ export function SettingsScreen({
             onToggle={() => updateSettings({ voiceEnabled: !settings.voiceEnabled })}
           />
           <SettingRow label="Voice style" value={settings.voiceStyle === "calm" ? "Calm" : settings.voiceStyle} />
+          <SelectRow
+            label="Voice language"
+            description="Improves browser speech recognition for different languages and accents."
+            value={settings.voiceLanguage}
+            options={voiceLanguageOptions}
+            onChange={(voiceLanguage) => updateSettings({ voiceLanguage })}
+          />
+          <ToggleRow
+            label="Accent adaptation"
+            description="Keeps ElevenLabs STT fallback enabled when browser recognition struggles with an accent."
+            enabled={settings.accentAdaptation}
+            onToggle={() => updateSettings({ accentAdaptation: !settings.accentAdaptation })}
+          />
         </SettingsSection>
 
         <SettingsSection title="Network">
@@ -83,6 +106,17 @@ export function SettingsScreen({
 
         <SettingsSection title="Backend">
           <SettingRow label="Firebase sync" value={backendLabel || "Local fallback"} />
+        </SettingsSection>
+
+        <SettingsSection title="Solana Mobile">
+          {solanaMobileCapabilities.map((capability) => (
+            <SettingRow
+              key={capability.label}
+              label={capability.label}
+              value={capability.value}
+              description={capability.description}
+            />
+          ))}
         </SettingsSection>
 
         {process.env.NODE_ENV !== "production" && onDemoReset ? (
@@ -132,17 +166,22 @@ function SettingsSection({
 function SettingRow({
   label,
   value,
+  description,
   icon,
   onClick
 }: {
   label: string;
   value: string;
+  description?: string;
   icon?: ReactNode;
   onClick?: () => void;
 }) {
   const content = (
     <>
-      <p className="text-sm font-semibold text-pluto-navy">{label}</p>
+      <span>
+        <p className="text-sm font-semibold text-pluto-navy">{label}</p>
+        {description ? <p className="mt-1 text-xs leading-5 text-pluto-slate">{description}</p> : null}
+      </span>
       <div className="flex items-center gap-2 text-right text-sm text-pluto-slate">
         <span>{value}</span>
         {icon}
@@ -186,5 +225,39 @@ function ToggleRow({
         {enabled ? <Check className="h-4 w-4" /> : null}
       </span>
     </button>
+  );
+}
+
+function SelectRow<TValue extends string>({
+  label,
+  description,
+  value,
+  options,
+  onChange
+}: {
+  label: string;
+  description: string;
+  value: TValue;
+  options: readonly { value: TValue; label: string }[];
+  onChange: (value: TValue) => void;
+}) {
+  return (
+    <label className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left">
+      <span>
+        <span className="block text-sm font-semibold text-pluto-navy">{label}</span>
+        <span className="mt-1 block text-xs leading-5 text-pluto-slate">{description}</span>
+      </span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value as TValue)}
+        className="max-w-[11rem] rounded-full border border-pluto-line bg-white px-3 py-2 text-right text-sm font-semibold text-pluto-navy outline-none"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

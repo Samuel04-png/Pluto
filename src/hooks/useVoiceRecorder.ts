@@ -55,9 +55,13 @@ function getSpeechRecognition() {
 }
 
 export function useVoiceRecorder({
+  languageCode = "en-US",
+  useCloudTranscription = false,
   onTranscript,
   onError
 }: {
+  languageCode?: string;
+  useCloudTranscription?: boolean;
   onTranscript: (transcript: string) => void;
   onError: (message: string) => void;
 }) {
@@ -88,13 +92,13 @@ export function useVoiceRecorder({
     clearTimers();
     manualStopRef.current = false;
 
-    const SpeechRecognition = getSpeechRecognition();
+    const SpeechRecognition = useCloudTranscription ? undefined : getSpeechRecognition();
     if (SpeechRecognition) {
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = "en-US";
+        recognition.lang = languageCode;
         recognition.onresult = (event) => {
           let finalTranscript = "";
           for (let index = event.resultIndex; index < event.results.length; index += 1) {
